@@ -1,7 +1,13 @@
+import json
 from locust import HttpUser, between, task
 
 class TrafficGenerator(HttpUser):
-    wait_time = between(1, 5)
+    wait_time = between(0.1, 0.9)
+    reader = readFile()
+    reader.loadFile()
+
+    def on_start(self):
+        print("On Start")
 
     @task
     def simulate_traffic(self):
