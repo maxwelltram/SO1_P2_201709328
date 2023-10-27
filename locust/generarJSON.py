@@ -71,7 +71,7 @@ notas=[50,60,70,80,90,100]
 
 archivo=[]
 
-for i in range(1000):
+for i in range(10):
     x=random.randint(0,len(alumnos)-1)
     carnet=int(alumnos[x]['carnet'])
     nombre=alumnos[x]['nombre']
@@ -85,7 +85,7 @@ for i in range(1000):
     x=random.randint(0,len(notas)-1)
     nota=notas[x]
 
-    nuevo={"carnet":carnet,"nombre":nombre,"curso":curso,"nota":nota,"semestre":semestre,"year":2023}
+    nuevo={"carnet":str(carnet),"nombre":nombre,"curso":curso,"nota":str(nota),"semestre":semestre,"year":"2023"}
 
     archivo.append(nuevo)
 

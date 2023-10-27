@@ -7,16 +7,17 @@ app = Flask(__name__)
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 class Alumno:
-    def __init__(self, carnet, nombre , curso, nota, semestre, anio):
+    def __init__(self, carnet, nombre , curso, nota, semestre, year):
         self.carnet = carnet
         self.nombre = nombre
         self.curso = curso
         self.nota = nota
         self.semestre = semestre
-        self.anio = anio
+        self.year = year
 
-@app.route('/alumno/agregarAlumno', methods=['POST'])
-def agregarAlumno():
+@app.route('/agregarAlumno', methods=['POST'])
+def agregar_alumno():
+    
     try:
         data = request.get_json()
         alumno = Alumno(
@@ -25,16 +26,16 @@ def agregarAlumno():
             data['curso'], 
             data['nota'], 
             data['semestre'], 
-            data['anio']
+            data['year']
             )
-        
+        print(data)
         json_alumno = {
             "carnet": alumno.carnet,
             "nombre": alumno.nombre,
             "curso": alumno.curso,
             "nota": alumno.nota,
             "semestre": alumno.semestre,
-            "anio": alumno.anio
+            "year": alumno.year
         }
 
         counter = redis_client.incr('contador_alumnos')
@@ -43,7 +44,7 @@ def agregarAlumno():
         redis_client.set(key, json_alumno_str)
 
         print("Alumno agregado exitosamente en Redis", json_alumno)
-        return f"Gracias por cargar las notas! ({counter} alumnos registrdos)",200
+        return f"¡Gracias por votar! ({counter} votos registrados)", 200
     except Exception as e:
         return str(e), 500    
 

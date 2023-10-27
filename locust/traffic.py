@@ -21,7 +21,7 @@ class readFile():
             with open("CARGA-MASIVA.json", 'r', encoding='utf-8') as file:
                 self.data = json.loads(file.read())
         except Exception:
-            print(f'Error : {Exception}')
+            print(f'Error QUE ESTA DANDO : {Exception}')
 
 class trafficData(HttpUser):
     wait_time = between(0.1, 0.9) #Tiempo de espera entre registros
@@ -35,16 +35,24 @@ class trafficData(HttpUser):
     def sendMessage(self):
         data = self.reader.getData() #Registro obtenido de la lista
         if data is not None:
-            res = self.client.post("/voto/agregarVoto", json=data)
-            response = res.json()
-            print(response)
+            res = self.client.post("/agregarAlumno", json=data)
+            print("cargooooooooo")
+            #print(response)
         else:
             print("Empty") #No hay mas datos por enviar
             self.stop(True)
 
+
+
 # python3 -m venv venv
+# ---- Linux ----
 # source venv/bin/activate
+# ---- Linux ----
+# ---- Windows ----
+# venv/Scripts/activate
+# ---- Windows ----
 # pip install locust
-# locust -f tu_script.py
+# pip install simplejson
+# locust -f traffic.py
 # http://localhost:3300 
 # http://0.0.0.0:8089
