@@ -1,23 +1,29 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { BrowserRouter, Route, Switch, Routes, Router } from 'react-router-dom';
+//import NavBar from './components/NavBar.jsx';
+import NavBar from './components/navegacion/Navbar.js';
+import Prueba from './components/paginas/Prueba.js';
+import Notas from './components/paginas/Notas.js';
+import Inicio from './components/paginas/Inicio.js';
+import PieC from './components/paginas/PieC.js';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <NavBar />
+
+        <Routes>
+          <Route path='/inicio' element={<Inicio/>}/>
+          <Route path='/piec' element={<PieC/>}/>
+          <Route path='/prueba' element={<Prueba/>}/>
+          <Route path='/notas' element={<Notas/>}/>
+        </Routes>
+
+      </BrowserRouter>
+
     </div>
   );
 }
