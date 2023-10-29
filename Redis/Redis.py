@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import simplejson as json
 import redis
+import time
+from flask_socketio import SocketIO
 import mysql.connector
 
 # Configura la conexión a la base de datos
@@ -53,7 +55,7 @@ def agregar_alumno():
         json_alumno_str = json.dumps(json_alumno)
         redis_client.set(key, json_alumno_str)
 
-        
+        ##redis_client.publish('data_changes', 'data_added')
 
         print("Alumno agregado exitosamente en Redis", json_alumno)
         ##return f"¡Gracias por votar! ({counter} votos registrados)", 200
@@ -99,6 +101,32 @@ def agregar_alumno():
         print(f"Error en mysql: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/cantidadRegistros', methods=['GET'])
+def get_data():
+    # Consulta datos desde Redis (ajusta esta parte según tus necesidades)
+    total_data_count = r.dbsize()
+    return jsonify({'total_data_count': total_data_count})
+
+
+@app.route('/cantidadAlumnosC', methods=['GET'])
+def get_data2():
+    # Consulta datos desde Redis (ajusta esta parte según tus necesidades)
+    data = redis_client.get('data_key')
+    if data:
+        data = data.decode('utf-8')
+        return jsonify({'data': data})
+    else:
+        return jsonify({'data': []})
+
+
+def get_total_data_count():
+    return r.dbsize()
+
+def track_total_data_count():
+    while True:
+        total_data_count = get_total_data_count()
+        print(f"Número total de datos en Redis: {total_data_count}")
+        time.sleep(5)  # Ajusta el intervalo de tiempo según tus necesidades
 
 
 

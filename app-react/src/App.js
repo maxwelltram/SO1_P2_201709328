@@ -8,6 +8,7 @@ import Prueba from './components/paginas/Prueba.js';
 import Notas from './components/paginas/Notas.js';
 import Inicio from './components/paginas/Inicio.js';
 import PieC from './components/paginas/PieC.js';
+import RedTotal from './components/paginas/RedTotal.js';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path='/piec' element={<PieC/>}/>
           <Route path='/prueba' element={<Prueba/>}/>
           <Route path='/notas' element={<Notas/>}/>
+          <Route path='/redtotal' element={<RedTotal/>}/>
         </Routes>
 
       </BrowserRouter>

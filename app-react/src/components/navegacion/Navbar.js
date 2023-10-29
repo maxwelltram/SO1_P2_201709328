@@ -25,7 +25,7 @@ const NavBar = () => {
                                         <li><Link className="dropdown-item" to='/PieC'>Aprobados</Link></li>
                                         <li><Link className="dropdown-item" to='/Prueba'>Cursos + alumnos</Link></li>
                                         <li><Link className="dropdown-item" to='/Notas'>Promedio de alumnos</Link></li>
-                                        <li><Link className="dropdown-item" href="#">Something else here</Link></li>
+                                        <li><Link className="dropdown-item" to='/RedTotal'>Registros totales Redis</Link></li>
                                     </ul>
                                 </li>
                             </ul>

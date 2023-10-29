@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+
 const app = express();
 const port = 3001;
 const db = require('./db-config');
 // db-config.js
 //const mysql = require('mysql2');
+const bodyParser = require('body-parser');
 
 // Allow requests from 'http://localhost:3000'
 const corsOptions = {
@@ -12,6 +14,7 @@ const corsOptions = {
   };
 
   app.use(cors(corsOptions));
+  app.use(bodyParser.json());
 /*const dbConnection = mysql.createConnection({
   host: '35.245.80.91', // Dirección del servidor de MySQL
   user: 'root', // Nombre de usuario de MySQL
@@ -51,17 +54,22 @@ app.get('/todosAlumnos', (req, res) => {
         if (err) {
             throw err;
         }
-        const jsonData = JSON.stringify(results);
+        res.status(200).json(results);
+        //const jsonData = JSON.stringify(results);
         //res.json(results);
-        console.log(jsonData+" Data enviada");
-        res.send(jsonData);
+        //console.log(jsonData+" Data enviada");
+        //res.send(jsonData);
 
     });
 });
 
 // PORCENTAJE DE APROBACION POR CURSO Y SEMESTRE
-app.get('/aprobacionCurSem', (req, res) => {
-    const consulta = 'SELECT SUM(CASE WHEN nota >= 60 THEN 1 ELSE 0 END) AS aprobados, SUM(CASE WHEN nota < 60 THEN 1 ELSE 0 END) AS reprobados FROM calificacion WHERE semestre = \'2S\' AND curso=\'SO1\'';
+/*app.get('/aprobacionCurSem', (req, res) => {
+    const { semester, curso } = req.query;
+    console.log(semester);
+    console.log(curso);
+    const consulta = 'SELECT SUM(CASE WHEN nota >= 60 THEN 1 ELSE 0 END) AS aprobados, SUM(CASE WHEN nota < 60 THEN 1 ELSE 0 END) AS reprobados FROM calificacion WHERE semestre = \''+semester+'\' AND curso=\''+curso+'\'';
+    console.log(consulta);
     db.query(consulta, (err, results) => {
         if (err) {
             throw err;
@@ -72,34 +80,64 @@ app.get('/aprobacionCurSem', (req, res) => {
         res.send(jsonData);
 
     });
-});
+});*/
 
-
-// CONSULTA PROMEDIO DE ESTUDIANTES EN UN SEMESTRE  
-app.get('/calificacionProm', (req, res) => {
-    const consulta = 'SELECT  carnet,AVG(nota) as promedio FROM calificacion WHERE  semestre=\'1S\' GROUP BY carnet LIMIT 5';
+app.post('/aprobacionCurSem', (req, res) => {
+    const { semestre, curso } = req.body;
+    console.log(semestre);
+    console.log(curso);
+    const consulta = 'SELECT SUM(CASE WHEN nota >= 60 THEN 1 ELSE 0 END) AS aprobados, SUM(CASE WHEN nota < 60 THEN 1 ELSE 0 END) AS reprobados FROM calificacion WHERE semestre =\''+semestre+'\' AND curso=\''+curso+'\'';
+    console.log(consulta);
     db.query(consulta, (err, results) => {
         if (err) {
             throw err;
         }
-        const jsonData = JSON.stringify(results);
+        res.status(200).json(results);
+        console.log(results);
+        //const jsonData = JSON.stringify(results);
         //res.json(results);
-        console.log(jsonData+" Data enviada");
-        res.send(jsonData);
+        //console.log(jsonData+" Data enviada");
+        //res.send(jsonData);
+
+    });
+});
+
+
+
+// CONSULTA PROMEDIO DE ESTUDIANTES EN UN SEMESTRE  
+app.post('/calificacionProm', (req, res) => {
+    //console.log(req+"----------------------------"+req.body);
+    const { semestre } = req.body;
+    //console.log(semestre+" Semestre de NODEeeee");
+    const consulta = 'SELECT  carnet,AVG(nota) as promedio FROM calificacion WHERE  semestre=\''+semestre+'\' GROUP BY carnet LIMIT 5';
+    //console.log(consulta);
+    db.query(consulta, (err, results) => {
+        if (err) {
+            throw err;
+        }
+        //const jsonData = JSON.stringify(results);
+        //res.json(results);
+        //console.log(jsonData+" Data enviada");
+        //res.send(jsonData);
+        res.status(200).json(results);
+        console.log(results);
     });
 });
 
 // CONSULTA CURSOS CON MAYOR NUMERO DE ALUMNOS
-app.get('/cursoAlumAsig', (req, res) => {
-    const consulta = 'SELECT  curso, COUNT(curso) as Asignados FROM calificacion WHERE semestre=\'1S\' GROUP BY curso LIMIT 3';
+app.post('/cursoAlumAsig', (req, res) => {
+    const { semestre } = req.body;
+    const consulta = 'SELECT  curso, COUNT(curso) as Asignados FROM calificacion WHERE semestre=\''+semestre+'\' GROUP BY curso LIMIT 3';
     db.query(consulta, (err, results) => {
         if (err) {
             throw err;
         }
-        const jsonData = JSON.stringify(results);
+        //const jsonData = JSON.stringify(results);
         //res.json(results);
-        console.log(jsonData+" Data enviada");
-        res.send(jsonData);
+        //console.log(jsonData+" Data enviada");
+        //res.send(jsonData);
+        res.status(200).json(results);
+        console.log(results);
         
     });
 });
