@@ -19,9 +19,9 @@ type server struct {
 	pb.UnimplementedGetInfoServer
 }
 
-//Corre en puerto 3001
+//Corre en puerto 3002
 const (
-	port = ":3001"
+	port = ":3002"
 )
 
 //Struct tipo alumno, para recibir datos

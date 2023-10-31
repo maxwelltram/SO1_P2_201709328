@@ -160,6 +160,101 @@ app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
 });
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server, { 
+  cors:{
+  origin: '*', // reemplaza esto con la URL de tu cliente
+  optionsSuccessStatus: 200, // para soporte de navegadores antiguos
+  methods: 'GET,PUT,POST,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true // habilita las credenciales de origen cruzado
+  }
+});
+
+"use strict";
+
+const Redis = require("ioredis");
+
+class RedisConnection {
+    constructor() {
+        this.client = new Redis({
+            host: '172.20.0.2', // reemplaza esto con tu host
+            port: 6379, // reemplaza esto con tu puerto
+        });
+
+        this.client.on('connect', () => {
+            console.log('Conectado a Redis');
+        });
+
+        this.client.on('error', (err) => {
+            console.log('Error de Redis:', err);
+        });
+    }
+
+    async get(key){
+        return await this.client.get(key);
+    }
+
+    async set(key, value){
+        return await this.client.set(key, value);
+    }
+
+    async keys(pattern){
+        return await this.client.keys(pattern);
+    }
+}
+
+// Uso
+const redisClient = new RedisConnection();
+
+
+
+
+io.on('connection', async (socket) => {
+  console.log('Nuevo cliente conectado');
+
+  // Obtener cantidad total de registros en tiempo real
+  try {
+    const keys = await redisClient.keys('*');
+    console.log(keys);
+    const totalRegistros = keys.length;
+    socket.emit('totalRegistros', totalRegistros);
+    console.log('Total de registros: ', totalRegistros);
+  } catch (err) {
+    console.error(err);
+  }
+    
+  // Escuchar solicitudes de cantidad de alumnos en un curso y semestre específico
+  socket.on('alumnosCursoSemestre', async (data) => {
+    const { semestre, curso } = data;
+    const claveRedis = `nota:AYD1:1S`;
+    const claveRedis2 = `nota:${curso}:${semestre}`;
+    const claveRedis3 = `nota:${curso}:${semestre}`;
+
+    try {
+      const alumnos = await redisClient.keys(claveRedis);
+      const cantidadAlumnos = alumnos.length;
+      socket.emit('cantidadAlumnos', cantidadAlumnos);
+      console.log(`Cantidad de alumnos en el curso ${curso} y semestre ${semestre}: `, cantidadAlumnos);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
+
+
+
+
+// Inicia el servidor
+//server.listen(8000, function () {
+//  console.log('Servidor iniciado en el puerto 8000');
+//});
+
+// ...
+
+
+
+
 // Cerrar la conexión cuando hayas terminado
 //dbConnection.end();
 //});

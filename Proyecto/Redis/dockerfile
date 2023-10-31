@@ -1,0 +1,21 @@
+# Crea un entorno virtual
+RUN python -m venv venv
+
+# Activa el entorno virtual
+SHELL ["/bin/bash", "-c"]
+RUN source venv/bin/activate
+
+# Instala las dependencias en el entorno virtual
+RUN pip install -r requirements.txt
+
+# Copia el código de la aplicación al contenedor
+COPY . .
+
+# Instala Gunicorn
+RUN pip install gunicorn
+
+# Expone el puerto en el que se ejecutará la aplicación
+EXPOSE 3300
+
+# Comando para iniciar la aplicación con Gunicorn
+CMD ["gunicorn", "-b", "0.0.0.0:3300", "app:app"]

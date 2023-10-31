@@ -1,0 +1,70 @@
+version: '3.3' 
+
+services:
+  dbredis:
+    container_name: BDRedis
+    image: redis
+    restart: always 
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6377:6379
+    networks:
+      - default1 
+
+  grcpserver:
+    container_name: GrcpServer
+    build: servergo
+    restart: always
+    ports:
+      - "3002:3002"
+    networks:
+      - default1
+
+  grcpclient:
+    depends_on:
+      - grcpserver
+    container_name: GrpcClient
+    build: ./Proyecto/client
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - default1
+
+  servidor:
+    container_name: NodeServer
+    build: nodeback
+    restart: always
+    ports:
+      - "3001:3001"
+    networks:
+      - default1
+
+  servidorpython:
+    container_name: PythonApp
+    build: ./Proyecto/Redis
+    restart: always
+    ports:
+      - "33000:3300"
+    networks:
+      - default1
+
+  frontend:
+    container_name: Frontend
+    restart: always
+    build: reactapp
+    image: frontend
+    ports:
+      - "3001:3000" 
+    networks:
+      - default1
+
+volumes:
+  db-data:
+  redis-data:
+
+networks:
+  default1:
+
+    
