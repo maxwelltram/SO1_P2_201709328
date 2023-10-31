@@ -14,7 +14,7 @@ services:
 
   grcpserver:
     container_name: GrcpServer
-    build: servergo
+    build: ./Proyecto/server
     restart: always
     ports:
       - "3002:3002"
@@ -34,7 +34,7 @@ services:
 
   servidor:
     container_name: NodeServer
-    build: nodeback
+    build: ./Proyecto/node-front
     restart: always
     ports:
       - "3001:3001"
@@ -53,7 +53,7 @@ services:
   frontend:
     container_name: Frontend
     restart: always
-    build: reactapp
+    build: ./Proyecto/app-react
     image: frontend
     ports:
       - "3001:3000" 
