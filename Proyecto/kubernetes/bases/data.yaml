@@ -1,35 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proyecto2
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-db
+  name: redis-deployment
+  namespace: proyecto2
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      role: mysql-db
-  replicas: 1
+      app: redis
   template:
     metadata:
       labels:
-        role: mysql-db
+        app: redis
     spec:
       containers:
-      - name: mysql-db
-        image: mysql
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: mysql1234
-
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-mysql
+  name: redis-service
+  namespace: proyecto2
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 3306
-    targetPort: 3306
   selector:
-    role: mysql-db
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: LoadBalancer

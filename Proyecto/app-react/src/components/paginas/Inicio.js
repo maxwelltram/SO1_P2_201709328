@@ -7,7 +7,7 @@ function Inicio() {
 
   useEffect(() => {
     // Realiza una solicitud al backend de Node.js para obtener los datos
-    axios.get('http://localhost:3001/todosAlumnos') // Reemplaza con la URL correcta
+    axios.get('http://172.19.0.2:3001/todosAlumnos') // Reemplaza con la URL correcta
       .then(response => {
         const dataFromBackend = response.data;
         setData(dataFromBackend);

@@ -1,3 +1,12 @@
+# Utiliza una imagen base de Python
+FROM python:3.8
+
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copia el archivo de requisitos e instala las dependencias
+COPY requirements.txt requirements.txt
+
 # Crea un entorno virtual
 RUN python -m venv venv
 
@@ -15,7 +24,7 @@ COPY . .
 RUN pip install gunicorn
 
 # Expone el puerto en el que se ejecutará la aplicación
-EXPOSE 3300
+EXPOSE 8000
 
 # Comando para iniciar la aplicación con Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:3300", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "Redis:app"]

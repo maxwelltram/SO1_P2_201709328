@@ -11,15 +11,15 @@ table {
   }
   
   th {
-    background-color: #f2f2f2;
+    background-color: #ebd426;
   }
   
   tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #ebd426;
   }
   
   tr:hover {
-    background-color: #ddd;
+    background-color: #ebd426;
   }
   select {
     padding: 8px; /* Añade espacio interno al ListBox */
@@ -29,7 +29,7 @@ table {
   
   button {
     padding: 8px 16px; /* Añade espacio interno al botón */
-    background-color: #007bff; /* Color de fondo */
-    color: #fff; /* Color de texto */
+    background-color: #0dff00; /* Color de fondo */
+    color: #000000; /* Color de texto */
     border: none; /* Quita el borde del botón */
   }

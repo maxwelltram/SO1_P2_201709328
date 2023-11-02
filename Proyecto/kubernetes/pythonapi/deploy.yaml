@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proyecto2
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apipython
+  name: apipython
+  namespace: proyecto2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apipython
+  template:
+    metadata:
+      labels:
+        app: apipython
+    spec:
+      containers:
+      - name: servidor-python
+        image: maxwelltram/pythonapp:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3300
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apipython
+  name: apipython
+  namespace: proyecto2
+spec:
+  type: LoadBalancer
+  ports:
+    - name: apipython
+      port: 3300
+      protocol: TCP
+      targetPort: 3300
+  selector:
+    app: apipython

@@ -1,49 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import socketIOClient from 'socket.io-client';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 
-const socket = socketIOClient('http://localhost:3300');  // Reemplaza con la URL de tu servidor Flask
+const socket = io("http://172.19.0.7:3300"); // Asegúrate de que la URL coincida con la del servidor Express con Socket.IO
+
+
 
 function App() {
-  const [totalDataCounts, setTotalDataCounts] = useState([]);
+   // Conecta el cliente al servidor
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [cantidadAlumnos, setCantidadAlumnos] = useState(0);
 
   useEffect(() => {
-    socket.on('total_data_count', (data) => {
-      setTotalDataCounts((prevCounts) => [...prevCounts, data.count]);
+    // Escucha el evento 'totalRegistros' desde el servidor
+    socket.on('totalRegistros', (total) => {
+      setTotalRegistros(total);
     });
+
+    // Escucha el evento 'cantidadAlumnos' desde el servidor
+    socket.on('cantidadAlumnos', (cantidad) => {
+      setCantidadAlumnos(cantidad);
+    });
+
+    // Emite el evento 'alumnosCursoSemestre' al servidor
+    socket.emit('alumnosCursoSemestre', { curso: 'MiCurso', semestre: 'MiSemestre' });
   }, []);
 
-  const data = {
-    labels: totalDataCounts.map((_, index) => `Time ${index}`),
-    datasets: [
-      {
-        label: 'Total Data Count',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: totalDataCounts,
-      },
-    ],
-  };
-
   return (
-    <div>
-      <h1>Total Data Count in Redis</h1>
-      <Line data={data} />
+    <div className="App">
+      <h1>API en Tiempo Real con Socket.IO</h1>
+      <p>Cantidad Total de Registros: {totalRegistros}</p>
+      <p>Cantidad de Alumnos en Curso y Semestre Específico: {cantidadAlumnos}</p>
     </div>
   );
 }

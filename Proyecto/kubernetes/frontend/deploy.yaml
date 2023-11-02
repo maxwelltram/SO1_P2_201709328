@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: proyecto2
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: front
+  name: front
+  namespace: proyecto2
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+      - image: maxwelltram/frontend:latest
+        imagePullPolicy: Always
+        name: front
+        ports:
+          - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: front
+  name: front
+  namespace: proyecto2
+
+spec:
+  type: LoadBalancer
+  ports:
+    - name: front
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: front

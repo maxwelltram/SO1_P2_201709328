@@ -37,7 +37,7 @@ services:
     build: ./Proyecto/node-front
     restart: always
     ports:
-      - "3001:3001"
+      - "3003:3001"
     networks:
       - default1
 

@@ -24,7 +24,7 @@ function PieC() {
 
   const fetchData = () => {
 
-    const url = `http://localhost:3001/aprobacionCurSem`;
+    const url = `http://172.19.0.2:3001/aprobacionCurSem`;
     // Realiza una solicitud al backend de Node.js para obtener los datos
     console.log(semester + ' grafica pieeeeee semestre');
     console.log(curso + ' grafica pieeeeee curos');

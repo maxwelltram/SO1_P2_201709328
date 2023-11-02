@@ -17,7 +17,7 @@ function Notas() {
   const fetchData = () => {
     if (semester!=='N' && semester!=='') {
     //const url=`http://localhost:3001/calificacionProm?semester=${semester}`;
-    const url=`http://localhost:3001/calificacionProm`;
+    const url=`http://172.19.0.2:3001/calificacionProm`;
     //console.log(semester+' reacttttttttttt');
     //console.log(url);
     axios.post(url,{semestre:semester})
@@ -40,25 +40,7 @@ function Notas() {
     }
   }, [shouldFetchData]);
 
-  /*useEffect(() => {
-    // Realiza una solicitud al backend de Node.js para obtener los datos
-    axios.get('http://localhost:3001/calificacionProm')  // Asegúrate de ajustar la URL a tu API backend
-      .then(response => {
-        const dataFromBackend = response.data;
-        console.log(dataFromBackend);
-        setData(dataFromBackend);
-        //const parsedData = JSON.parse(dataFromBackend);
-        console.log(dataFromBackend);
-
-
-        //const { labels, values } = response.data;
-        //console.log(labels, values);
-        //setData({ labels, values });
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos:', error);
-      });
-  }, []);*/
+  
 
   const labels = data.map(d => d.carnet);
   const values = data.map(d => d.promedio);

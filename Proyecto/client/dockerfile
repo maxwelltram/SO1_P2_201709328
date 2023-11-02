@@ -1,5 +1,5 @@
 
-FROM golang:1.19
+FROM golang:1.21
 
 
 
@@ -10,10 +10,10 @@ WORKDIR /app
 COPY . .
 
 # Compila la aplicación
-RUN go build -o main .
+RUN go build -o Main .
 
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 5051
 
 # Ejecuta la aplicación al iniciar el contenedor
-CMD ["./main"]
+CMD ["./Main"]

@@ -25,7 +25,7 @@ function Prueba() {
   const fetchData = () => {
     if (semester!=='N' && semester!=='') {
     // Realiza una solicitud al backend de Node.js para obtener los datos
-    const url = `http://localhost:3001/cursoAlumAsig`
+    const url = `http://172.19.0.2:3001/cursoAlumAsig`
     axios.post(url, {semestre: semester})  // Asegúrate de ajustar la URL a tu API backend
       .then(response => {
         const dataFromBackend = response.data;
